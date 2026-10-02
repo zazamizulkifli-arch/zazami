@@ -257,21 +257,29 @@ export const defaultWearable: WearableDevice = {
 // Storage operations
 export function getStoredRecords(): HealthRecord[] {
   try {
+    if (typeof localStorage === 'undefined') return generateSeedRecords();
     const raw = localStorage.getItem(STORAGE_KEYS.RECORDS);
     if (!raw) {
       const initial = generateSeedRecords();
       saveStoredRecords(initial);
       return initial;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      const initial = generateSeedRecords();
+      saveStoredRecords(initial);
+      return initial;
+    }
+    return parsed;
   } catch (err) {
-    console.error('Failed to load records from localStorage', err);
+    console.warn('Failed to load records from localStorage', err);
     return generateSeedRecords();
   }
 }
 
 export function saveStoredRecords(records: HealthRecord[]): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.RECORDS, JSON.stringify(records));
   } catch (err) {
     console.error('Failed to save records', err);
@@ -280,12 +288,17 @@ export function saveStoredRecords(records: HealthRecord[]): void {
 
 export function getStoredUserProfile(): UserProfile {
   try {
+    if (typeof localStorage === 'undefined') return defaultUserProfile;
     const raw = localStorage.getItem(STORAGE_KEYS.USER_PROFILE);
     if (!raw) {
       saveStoredUserProfile(defaultUserProfile);
       return defaultUserProfile;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || !parsed.name) {
+      return defaultUserProfile;
+    }
+    return parsed;
   } catch (err) {
     return defaultUserProfile;
   }
@@ -293,6 +306,7 @@ export function getStoredUserProfile(): UserProfile {
 
 export function saveStoredUserProfile(profile: UserProfile): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile));
   } catch (err) {
     console.error('Failed to save profile', err);
@@ -301,12 +315,17 @@ export function saveStoredUserProfile(profile: UserProfile): void {
 
 export function getAllUsers(): UserProfile[] {
   try {
+    if (typeof localStorage === 'undefined') return secondaryUsers;
     const raw = localStorage.getItem(STORAGE_KEYS.ALL_USERS);
     if (!raw) {
       saveAllUsers(secondaryUsers);
       return secondaryUsers;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return secondaryUsers;
+    }
+    return parsed;
   } catch (err) {
     return secondaryUsers;
   }
@@ -314,6 +333,7 @@ export function getAllUsers(): UserProfile[] {
 
 export function saveAllUsers(users: UserProfile[]): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.ALL_USERS, JSON.stringify(users));
   } catch (err) {
     console.error('Failed to save all users', err);
@@ -322,12 +342,17 @@ export function saveAllUsers(users: UserProfile[]): void {
 
 export function getStoredReminders(): ReminderSetting[] {
   try {
+    if (typeof localStorage === 'undefined') return defaultReminders;
     const raw = localStorage.getItem(STORAGE_KEYS.REMINDERS);
     if (!raw) {
       saveStoredReminders(defaultReminders);
       return defaultReminders;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return defaultReminders;
+    }
+    return parsed;
   } catch (err) {
     return defaultReminders;
   }
@@ -335,6 +360,7 @@ export function getStoredReminders(): ReminderSetting[] {
 
 export function saveStoredReminders(reminders: ReminderSetting[]): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.REMINDERS, JSON.stringify(reminders));
   } catch (err) {
     console.error('Failed to save reminders', err);
@@ -343,12 +369,17 @@ export function saveStoredReminders(reminders: ReminderSetting[]): void {
 
 export function getStoredArticles(): CMSArticle[] {
   try {
+    if (typeof localStorage === 'undefined') return defaultCMSArticles;
     const raw = localStorage.getItem(STORAGE_KEYS.CMS_ARTICLES);
     if (!raw) {
       saveStoredArticles(defaultCMSArticles);
       return defaultCMSArticles;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return defaultCMSArticles;
+    }
+    return parsed;
   } catch (err) {
     return defaultCMSArticles;
   }
@@ -356,6 +387,7 @@ export function getStoredArticles(): CMSArticle[] {
 
 export function saveStoredArticles(articles: CMSArticle[]): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.CMS_ARTICLES, JSON.stringify(articles));
   } catch (err) {
     console.error('Failed to save articles', err);
@@ -364,12 +396,17 @@ export function saveStoredArticles(articles: CMSArticle[]): void {
 
 export function getStoredBroadcasts(): SystemBroadcast[] {
   try {
+    if (typeof localStorage === 'undefined') return defaultBroadcasts;
     const raw = localStorage.getItem(STORAGE_KEYS.BROADCASTS);
     if (!raw) {
       saveStoredBroadcasts(defaultBroadcasts);
       return defaultBroadcasts;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return defaultBroadcasts;
+    }
+    return parsed;
   } catch (err) {
     return defaultBroadcasts;
   }
@@ -377,6 +414,7 @@ export function getStoredBroadcasts(): SystemBroadcast[] {
 
 export function saveStoredBroadcasts(broadcasts: SystemBroadcast[]): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.BROADCASTS, JSON.stringify(broadcasts));
   } catch (err) {
     console.error('Failed to save broadcasts', err);
@@ -385,12 +423,17 @@ export function saveStoredBroadcasts(broadcasts: SystemBroadcast[]): void {
 
 export function getStoredWearable(): WearableDevice {
   try {
+    if (typeof localStorage === 'undefined') return defaultWearable;
     const raw = localStorage.getItem(STORAGE_KEYS.WEARABLE);
     if (!raw) {
       saveStoredWearable(defaultWearable);
       return defaultWearable;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || !parsed.name) {
+      return defaultWearable;
+    }
+    return parsed;
   } catch (err) {
     return defaultWearable;
   }
@@ -398,6 +441,7 @@ export function getStoredWearable(): WearableDevice {
 
 export function saveStoredWearable(device: WearableDevice): void {
   try {
+    if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.WEARABLE, JSON.stringify(device));
   } catch (err) {
     console.error('Failed to save wearable', err);

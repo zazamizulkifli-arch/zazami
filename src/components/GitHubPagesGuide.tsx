@@ -66,16 +66,15 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4`;
 
-  const gitCommands = `# 1. Inisialisasi Git & Commit
-git init
+  const gitCommands = `# 1. Tambah perubahan kod & commit
 git add .
-git commit -m "Inisialisasi Portal Rekod Kesihatan SihatKu dengan CI/CD"
+git commit -m "Betulkan konfigurasi GitHub Pages base path & package-lock CI/CD"
 
-# 2. Hubungkan ke repositori GitHub anda
+# 2. Pastikan remote mengarah ke repositori anda
 git branch -M main
-git remote add origin https://github.com/<username>/<nama-repo>.git
+git remote set-url origin https://github.com/zazamizulkifli-arch/zazami.git || git remote add origin https://github.com/zazamizulkifli-arch/zazami.git
 
-# 3. Tolak ke branch main (CI/CD GitHub Actions akan bermula automatik!)
+# 3. Tolak ke branch main (CI/CD GitHub Actions akan membina dist automatik!)
 git push -u origin main`;
 
   const copyText = (text: string, setCopied: (v: boolean) => void) => {
@@ -175,7 +174,7 @@ git push -u origin main`;
             Portal Siap Beroperasi!
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Portal anda sedia diakses di URL <code>https://&lt;username&gt;.github.io/&lt;nama-repo&gt;/</code> dengan sijil HTTPS percuma.
+            Portal anda sedia diakses di URL <code>https://zazamizulkifli-arch.github.io/zazami/</code> dengan binaan aset production dari <code>dist/assets/</code>.
           </p>
         </div>
       </div>

@@ -49,7 +49,6 @@ export const ReminderManager: React.FC<ReminderManagerProps> = ({
       if (perm === 'granted') {
         new Notification('SihatKu: Kebenaran Diberikan!', {
           body: 'Pemberitahuan peringatan harian anda kini aktif.',
-          icon: '/favicon.ico',
         });
       }
     }
